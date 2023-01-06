@@ -61,4 +61,20 @@ public class Translator {
         }
         return result;
     }
+
+    public String translateWithJacksonMapping() {
+        String result = null;
+        System.out.println("Введите предложение на русском языке:");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            String sentenceToTranslate = reader.readLine();
+            jsonData.put(texts, sentenceToTranslate);
+            jsonData.put("targetLanguageCode", "en");
+
+            HttpEntity<Map<String, String>> request = new HttpEntity<>(jsonData, headers);
+            result = restTemplate.postForObject(translateApiUrl, request, YandexResponse.class).toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
